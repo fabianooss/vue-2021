@@ -1,15 +1,40 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>Meu projeto vue</h1>
+    <p :title="informacao">Autor: {{autor.toUpperCase()}} - {{criacao}} </p>
+     
+    <button @click="trocarInformacoes()">Mostrar/Esconder informações</button> 
+    <div v-show="mostrarInformacoesComplementares">
+        <h2>Informações adicionais</h2>
+
+        <ul>
+           <li v-for="p in projetos" :key="p.nome">{{p.nome}}</li>
+        </ul>
+
+    </div> 
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {   //JSON - Javascript Object Notation
+      autor: 'Fabiano Oss',
+      criacao: 'criando em ' + new Date().toLocaleString(),
+      informacao: 'Posso colocar uma informação customizada',
+      mostrarInformacoesComplementares: false,
+      projetos: [
+        {nome: "HTML", tamanho: 100 },
+        {nome: "CSS", tamanho: 80},
+        {nome: "JavaScript", tamanho: 200}
+      ]
+    }
+  },
+  methods: {
+    trocarInformacoes() {
+      this.mostrarInformacoesComplementares = !this.mostrarInformacoesComplementares
+    } 
   }
 }
 </script>
