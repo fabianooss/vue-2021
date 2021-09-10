@@ -13,12 +13,7 @@
             <label for="tamanho">Tamanho:</label><br/>
             <input type="number" id="tamanho" required min="0" max="100" v-model="projeto.tamanho"/> <br/>
             
-            <div v-if="alteracaoIdx > -1">
-              <input type="submit" value="Alterar projeto" />
-            </div>
-            <div v-else>
-              <input type="submit" value="Adicionar projeto" />
-            </div>
+            <input type="submit" :value="acao" />
 
         </form>  
 
@@ -29,7 +24,7 @@
             <th>Tamanho</th>
             <th></th>
           </tr>
-          <tr v-for="(p, idx) in projetos" :key="p.nome">
+          <tr v-for="(p, idx) in projetos" :key="p.nome" :class="{'alteracao': alteracaoIdx == idx}">
             <td> {{p.nome}} </td>
             <td> {{p.tamanho}} </td>
             <td> 
@@ -100,6 +95,11 @@ export default {
       this.projeto = Object.assign({}, this.projetos[idx]) 
       this.alteracaoIdx = idx
     }
+  },
+  computed: {
+    acao() {
+      return this.alteracaoIdx > -1 ? "Alterar" : "Adicionar"
+    }
   }
 }
 </script>
@@ -113,4 +113,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.alteracao {
+  background-color: yellow;
+}
+
 </style>
