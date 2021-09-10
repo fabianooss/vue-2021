@@ -32,6 +32,9 @@
               <button @click="remover(p)">Remover</button> 
             </td>
           </tr>
+          <tr>
+            <td colspan="3">Tamanho total: {{tamanhoTotal}} </td>
+          </tr>
         </table>
 
     </div> 
@@ -99,6 +102,15 @@ export default {
   computed: {
     acao() {
       return this.alteracaoIdx > -1 ? "Alterar" : "Adicionar"
+    },
+    tamanhoTotal() {
+      return this.projetos.map(p => p.tamanho )
+                  .reduce( (a,b) => a + b , 0 )
+    }
+  },
+  watch: {
+    alteracaoIdx: function(val) {
+      console.log(val)
     }
   }
 }
