@@ -2,7 +2,9 @@
   <div>
     <h1>Meu projeto vue</h1>
     <p :title="informacao">Autor: {{autor.toUpperCase()}} - {{criacao}} </p>
-     
+    <font-awesome-icon icon="sort-up" />
+    <font-awesome-icon icon="sort-down" />
+    <font-awesome-icon icon="sort" />
     <button @click="trocarInformacoes()">Mostrar/Esconder informações</button> 
     <div v-show="mostrarInformacoesComplementares">
         <h2>Informações adicionais</h2>
@@ -20,8 +22,8 @@
 
         <table>
           <tr>
-            <th>Nome</th>
-            <th>Tamanho</th>
+            <th @click="ordenar('nome')" class="ordenar">Nome  <font-awesome-icon :icon="getTipoOrdenacao('nome')" />  </th>
+            <th @click="ordenar('tamanho')" class="ordenar">Tamanho <font-awesome-icon :icon="getTipoOrdenacao('tamanho')"/></th>
             <th></th>
           </tr>
           <tr v-for="(p, idx) in projetos" :key="p.nome" :class="{'alteracao': alteracaoIdx == idx}">
@@ -58,7 +60,11 @@ export default {
         nome: null,
         tamanho: 0
       },
-      alteracaoIdx: -1
+      alteracaoIdx: -1,
+      orderField: {
+        nome: null,
+        type: 'asc'
+      }
     }
   },
   methods: {
@@ -97,6 +103,28 @@ export default {
     alterar(idx) {
       this.projeto = Object.assign({}, this.projetos[idx]) 
       this.alteracaoIdx = idx
+    },
+    getTipoOrdenacao(field) {
+      if (field == this.orderField.nome) {
+        if (this.orderField.type == 'asc')
+          return 'sort-up'
+        return 'sort-down'
+      }
+      return 'sort'
+    },
+    ordenar(field) {
+      if (field == this.orderField.nome) {
+        this.orderField.type = this.orderField.type == 'asc' ? 'desc' : 'asc'
+      }
+      this.orderField.nome = field
+      const orderType = this.orderField.type == 'asc' ? 1 : -1
+
+      this.projetos.sort( (a, b) => {
+          if (isNaN(a[field]) || isNaN(b[field])) {
+            return (a[field].localeCompare( b[field] )) * orderType
+          }
+          return (a[field] - b[field]) * orderType
+      })
     }
   },
   computed: {
@@ -128,6 +156,10 @@ export default {
 
 .alteracao {
   background-color: yellow;
+}
+
+.ordenar {
+  cursor: pointer;
 }
 
 </style>
